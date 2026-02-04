@@ -8,6 +8,7 @@ interface Link {
   url: string;
   order: number;
   visible: boolean;
+  category: string;
 }
 
 interface LinkFormProps {
@@ -19,6 +20,7 @@ interface LinkFormProps {
 export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [category, setCategory] = useState("general");
   const [saving, setSaving] = useState(false);
 
   async function handleAdd(e: React.FormEvent) {
@@ -29,10 +31,11 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
     await fetch("/api/links", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, url, userId }),
+      body: JSON.stringify({ title, url, userId, category }),
     });
     setTitle("");
     setUrl("");
+    setCategory("general");
     setSaving(false);
     onUpdate();
   }
@@ -59,7 +62,7 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
           placeholder="Link title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+          className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           required
         />
         <input
@@ -67,13 +70,23 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
           placeholder="https://example.com"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          className="rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+          className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           required
         />
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+        >
+          <option value="general">General</option>
+          <option value="professional">Professional</option>
+          <option value="social">Social</option>
+          <option value="learning">Learning</option>
+        </select>
         <button
           type="submit"
           disabled={saving}
-          className="rounded-xl bg-purple-600 px-6 py-3 font-semibold text-white transition hover:bg-purple-700 disabled:opacity-50"
+          className="rounded-xl bg-accent px-6 py-3 font-semibold text-dark-900 transition hover:bg-accent-light disabled:opacity-50"
         >
           {saving ? "Adding..." : "Add Link"}
         </button>
@@ -83,25 +96,30 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
         {links.map((link) => (
           <div
             key={link.id}
-            className={`flex items-center justify-between rounded-xl border bg-white p-4 ${
-              link.visible ? "border-gray-200" : "border-gray-200 opacity-50"
+            className={`flex items-center justify-between rounded-xl border border-dark-600 bg-dark-800 p-4 ${
+              link.visible ? "" : "opacity-50"
             }`}
           >
             <div className="min-w-0 flex-1">
-              <p className="truncate font-medium text-gray-900">{link.title}</p>
-              <p className="truncate text-sm text-gray-500">{link.url}</p>
+              <p className="truncate font-medium text-gray-100">{link.title}</p>
+              <p className="truncate text-sm text-gray-400">
+                {link.url}
+                <span className="ml-2 text-xs text-accent/60">
+                  [{link.category}]
+                </span>
+              </p>
             </div>
             <div className="ml-3 flex gap-2">
               <button
                 onClick={() => handleToggleVisibility(link)}
-                className="rounded-lg px-3 py-1.5 text-sm text-gray-600 transition hover:bg-gray-100"
+                className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition hover:bg-dark-700 hover:text-gray-200"
                 title={link.visible ? "Hide link" : "Show link"}
               >
                 {link.visible ? "Hide" : "Show"}
               </button>
               <button
                 onClick={() => handleDelete(link.id)}
-                className="rounded-lg px-3 py-1.5 text-sm text-red-600 transition hover:bg-red-50"
+                className="rounded-lg px-3 py-1.5 text-sm text-red-400 transition hover:bg-red-500/10"
               >
                 Delete
               </button>

@@ -5,6 +5,7 @@ export async function GET() {
   const users = await prisma.user.findMany({
     include: {
       links: { orderBy: { order: "asc" } },
+      projects: { orderBy: { order: "asc" } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -13,7 +14,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { username, name, bio } = body;
+  const { username, name, bio, title, company, email } = body;
 
   if (!username || !name) {
     return NextResponse.json(
@@ -31,8 +32,15 @@ export async function POST(request: NextRequest) {
   }
 
   const user = await prisma.user.create({
-    data: { username, name, bio },
-    include: { links: true },
+    data: {
+      username,
+      name,
+      bio: bio || null,
+      title: title || null,
+      company: company || null,
+      email: email || null,
+    },
+    include: { links: true, projects: true },
   });
 
   return NextResponse.json(user, { status: 201 });

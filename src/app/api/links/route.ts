@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { title, url, userId } = body;
+  const { title, url, userId, category } = body;
 
   if (!title || !url || !userId) {
     return NextResponse.json(
@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
       title,
       url,
       userId,
+      category: category || "general",
       order: (maxOrder._max.order ?? -1) + 1,
     },
   });
