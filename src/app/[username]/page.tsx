@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import ProfileHeader from "@/components/ProfileHeader";
 import LinkCard from "@/components/LinkCard";
 import ProjectCard from "@/components/ProjectCard";
+import { Mail } from "lucide-react";
 
 interface Props {
   params: Promise<{ username: string }>;
@@ -61,7 +62,7 @@ export default async function UserProfilePage({ params }: Props) {
       {/* Featured Projects */}
       {user.projects.length > 0 && (
         <section className="w-full">
-          <h2 className="mb-4 text-lg font-semibold text-gray-400">
+          <h2 className="mb-4 text-lg font-semibold text-theme-muted">
             Featured Projects
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -86,7 +87,7 @@ export default async function UserProfilePage({ params }: Props) {
             .filter((cat) => linksByCategory[cat]?.length)
             .map((cat) => (
               <div key={cat} className="mb-6">
-                <h2 className="mb-3 text-lg font-semibold text-gray-400">
+                <h2 className="mb-3 text-lg font-semibold text-theme-muted">
                   {categoryLabels[cat] || cat}
                 </h2>
                 <div className="flex flex-col gap-3">
@@ -105,16 +106,17 @@ export default async function UserProfilePage({ params }: Props) {
       )}
 
       {user.links.length === 0 && user.projects.length === 0 && (
-        <p className="text-gray-500">No content yet.</p>
+        <p className="text-theme-muted">No content yet.</p>
       )}
 
       {/* Contact Footer */}
       {user.email && (
-        <footer className="w-full border-t border-dark-700 pt-6 text-center">
+        <footer className="w-full border-t border-theme-muted/20 pt-6 text-center">
           <a
             href={`mailto:${user.email}`}
-            className="text-sm font-medium text-accent transition hover:text-accent-light"
+            className="inline-flex items-center gap-2 text-sm font-medium text-theme-accent transition hover:opacity-80"
           >
+            <Mail className="h-4 w-4" />
             {user.email}
           </a>
         </footer>
