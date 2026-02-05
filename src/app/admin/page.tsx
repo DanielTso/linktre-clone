@@ -121,17 +121,17 @@ function AdminContent() {
   const selectedUser = users.find((u) => u.id === selectedUserId);
 
   const inputClass =
-    "rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
+    "rounded-xl border border-theme-muted/30 bg-white/50 dark:bg-dark-800 px-4 py-3 text-theme-primary placeholder:text-theme-muted focus:border-theme-accent focus:outline-none focus:ring-2 focus:ring-theme-accent/20";
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-4 py-16">
-      <h1 className="mb-8 text-3xl font-bold text-gray-100">
+      <h1 className="mb-8 text-3xl font-bold text-theme-primary">
         Admin Dashboard
       </h1>
 
       {/* Create User Form */}
       <section className="glass-card mb-10 p-6">
-        <h2 className="mb-4 text-xl font-semibold text-gray-100">
+        <h2 className="mb-4 text-xl font-semibold text-theme-primary">
           Create Profile
         </h2>
         <form onSubmit={handleCreateUser} className="flex flex-col gap-3">
@@ -183,7 +183,7 @@ function AdminContent() {
           <button
             type="submit"
             disabled={creating}
-            className="rounded-xl bg-accent px-6 py-3 font-semibold text-dark-900 transition hover:bg-accent-light disabled:opacity-50"
+            className="rounded-xl bg-theme-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
           >
             {creating ? "Creating..." : "Create Profile"}
           </button>
@@ -193,7 +193,7 @@ function AdminContent() {
       {/* User Selector */}
       {users.length > 0 && (
         <section className="mb-6">
-          <h2 className="mb-3 text-xl font-semibold text-gray-100">
+          <h2 className="mb-3 text-xl font-semibold text-theme-primary">
             Manage Content
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -203,8 +203,8 @@ function AdminContent() {
                 onClick={() => setSelectedUserId(user.id)}
                 className={`rounded-full px-4 py-2 font-medium transition ${
                   selectedUserId === user.id
-                    ? "bg-accent text-dark-900"
-                    : "border border-dark-600 text-gray-400 hover:border-accent hover:text-accent"
+                    ? "bg-theme-accent text-white"
+                    : "border border-theme-muted/30 text-theme-secondary hover:border-theme-accent hover:text-theme-accent"
                 }`}
               >
                 {user.featured && (
@@ -223,7 +223,7 @@ function AdminContent() {
       {selectedUser && (
         <>
           <section className="glass-card mb-6 p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-100">
+            <h3 className="mb-4 text-lg font-semibold text-theme-primary">
               Profile
             </h3>
             <ProfileEditForm
@@ -234,7 +234,7 @@ function AdminContent() {
           </section>
 
           <section className="glass-card mb-6 p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-100">
+            <h3 className="mb-4 text-lg font-semibold text-theme-primary">
               Links for @{selectedUser.username}
             </h3>
             <LinkForm
@@ -245,7 +245,7 @@ function AdminContent() {
           </section>
 
           <section className="glass-card p-6">
-            <h3 className="mb-4 text-lg font-semibold text-gray-100">
+            <h3 className="mb-4 text-lg font-semibold text-theme-primary">
               Projects for @{selectedUser.username}
             </h3>
             <ProjectForm

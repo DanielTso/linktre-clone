@@ -107,37 +107,37 @@ export default function ProfileEditForm({
   }
 
   const inputClass =
-    "rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
+    "rounded-xl border border-theme-muted/30 bg-white/50 dark:bg-dark-800 px-4 py-3 text-theme-primary placeholder:text-theme-muted focus:border-theme-accent focus:outline-none focus:ring-2 focus:ring-theme-accent/20";
 
   if (!editing) {
     return (
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-lg font-semibold text-gray-100">{user.name}</p>
+          <p className="text-lg font-semibold text-theme-primary">{user.name}</p>
           {user.title && (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-theme-secondary">
               {user.title}
               {user.company && ` at ${user.company}`}
             </p>
           )}
           {user.bio && (
-            <p className="mt-1 text-sm text-gray-400">{user.bio}</p>
+            <p className="mt-1 text-sm text-theme-secondary">{user.bio}</p>
           )}
           {user.email && (
-            <p className="mt-1 text-sm text-gray-500">{user.email}</p>
+            <p className="mt-1 text-sm text-theme-muted">{user.email}</p>
           )}
           {user.resumeUrl && (
-            <p className="mt-1 text-sm text-accent">Resume uploaded</p>
+            <p className="mt-1 text-sm text-theme-accent">Resume uploaded</p>
           )}
           {user.featured && (
-            <span className="mt-2 inline-block rounded-full bg-accent/20 px-2 py-0.5 text-xs text-accent">
+            <span className="mt-2 inline-block rounded-full bg-theme-accent/20 px-2 py-0.5 text-xs text-theme-accent">
               Featured
             </span>
           )}
         </div>
         <button
           onClick={() => setEditing(true)}
-          className="ml-3 rounded-lg px-3 py-1.5 text-sm text-accent transition hover:bg-accent/10"
+          className="ml-3 rounded-lg px-3 py-1.5 text-sm text-theme-accent transition hover:bg-theme-accent/10"
         >
           Edit Profile
         </button>
@@ -197,12 +197,12 @@ export default function ProfileEditForm({
         className={inputClass}
         rows={2}
       />
-      <label className="flex items-center gap-2 text-sm text-gray-300">
+      <label className="flex items-center gap-2 text-sm text-theme-secondary">
         <input
           type="checkbox"
           checked={featured}
           onChange={(e) => setFeatured(e.target.checked)}
-          className="rounded border-dark-600 bg-dark-800 text-accent focus:ring-accent/20"
+          className="rounded border-theme-muted/30 bg-white/50 dark:bg-dark-800 text-theme-accent focus:ring-theme-accent/20"
         />
         Featured profile (shown as hero on homepage)
       </label>
@@ -210,13 +210,13 @@ export default function ProfileEditForm({
         <button
           onClick={handleSave}
           disabled={saving || !name.trim()}
-          className="rounded-xl bg-accent px-6 py-3 font-semibold text-dark-900 transition hover:bg-accent-light disabled:opacity-50"
+          className="rounded-xl bg-theme-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
         >
           {saving ? "Saving..." : "Save"}
         </button>
         <button
           onClick={handleCancel}
-          className="rounded-lg px-4 py-3 text-sm text-gray-400 transition hover:bg-dark-700 hover:text-gray-200"
+          className="rounded-lg px-4 py-3 text-sm text-theme-muted transition hover:bg-theme-accent/10 hover:text-theme-primary"
         >
           Cancel
         </button>

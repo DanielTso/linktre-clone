@@ -36,7 +36,7 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const inputClass =
-    "rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
+    "rounded-xl border border-theme-muted/30 bg-white/50 dark:bg-dark-800 px-4 py-3 text-theme-primary placeholder:text-theme-muted focus:border-theme-accent focus:outline-none focus:ring-2 focus:ring-theme-accent/20";
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
@@ -155,7 +155,7 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
         <button
           type="submit"
           disabled={saving}
-          className="rounded-xl bg-accent px-6 py-3 font-semibold text-dark-900 transition hover:bg-accent-light disabled:opacity-50"
+          className="rounded-xl bg-theme-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
         >
           {saving ? "Adding..." : "Add Link"}
         </button>
@@ -165,7 +165,7 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
         {links.map((link) => (
           <div
             key={link.id}
-            className={`rounded-xl border border-dark-600 bg-dark-800 p-4 ${
+            className={`rounded-xl border border-theme-muted/30 bg-white/50 dark:bg-dark-800 p-4 ${
               link.visible ? "" : "opacity-50"
             }`}
           >
@@ -198,13 +198,13 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleSaveEdit(link.id)}
-                    className="rounded-lg bg-accent px-4 py-1.5 text-sm font-medium text-dark-900 transition hover:bg-accent-light"
+                    className="rounded-lg bg-theme-accent px-4 py-1.5 text-sm font-medium text-white transition hover:opacity-90"
                   >
                     Save
                   </button>
                   <button
                     onClick={cancelEdit}
-                    className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition hover:bg-dark-700 hover:text-gray-200"
+                    className="rounded-lg px-3 py-1.5 text-sm text-theme-muted transition hover:bg-theme-accent/10 hover:text-theme-primary"
                   >
                     Cancel
                   </button>
@@ -213,12 +213,12 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
             ) : (
               <div className="flex items-center justify-between">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-gray-100">
+                  <p className="truncate font-medium text-theme-primary">
                     {link.title}
                   </p>
-                  <p className="truncate text-sm text-gray-400">
+                  <p className="truncate text-sm text-theme-secondary">
                     {link.url}
-                    <span className="ml-2 text-xs text-accent/60">
+                    <span className="ml-2 text-xs text-theme-accent/60">
                       [{link.category}]
                     </span>
                   </p>
@@ -226,13 +226,13 @@ export default function LinkForm({ userId, links, onUpdate }: LinkFormProps) {
                 <div className="ml-3 flex gap-2">
                   <button
                     onClick={() => startEdit(link)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-accent transition hover:bg-accent/10"
+                    className="rounded-lg px-3 py-1.5 text-sm text-theme-accent transition hover:bg-theme-accent/10"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleToggleVisibility(link)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition hover:bg-dark-700 hover:text-gray-200"
+                    className="rounded-lg px-3 py-1.5 text-sm text-theme-muted transition hover:bg-theme-accent/10 hover:text-theme-primary"
                     title={link.visible ? "Hide link" : "Show link"}
                   >
                     {link.visible ? "Hide" : "Show"}

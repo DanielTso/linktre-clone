@@ -46,7 +46,7 @@ export default function ProjectForm({
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const inputClass =
-    "rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
+    "rounded-xl border border-theme-muted/30 bg-white/50 dark:bg-dark-800 px-4 py-3 text-theme-primary placeholder:text-theme-muted focus:border-theme-accent focus:outline-none focus:ring-2 focus:ring-theme-accent/20";
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
@@ -196,7 +196,7 @@ export default function ProjectForm({
         <button
           type="submit"
           disabled={saving}
-          className="rounded-xl bg-accent px-6 py-3 font-semibold text-dark-900 transition hover:bg-accent-light disabled:opacity-50"
+          className="rounded-xl bg-theme-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
         >
           {saving ? "Adding..." : "Add Project"}
         </button>
@@ -206,7 +206,7 @@ export default function ProjectForm({
         {projects.map((project) => (
           <div
             key={project.id}
-            className={`rounded-xl border border-dark-600 bg-dark-800 p-4 ${
+            className={`rounded-xl border border-theme-muted/30 bg-white/50 dark:bg-dark-800 p-4 ${
               project.visible ? "" : "opacity-50"
             }`}
           >
@@ -250,13 +250,13 @@ export default function ProjectForm({
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleSaveEdit(project.id)}
-                    className="rounded-lg bg-accent px-4 py-1.5 text-sm font-medium text-dark-900 transition hover:bg-accent-light"
+                    className="rounded-lg bg-theme-accent px-4 py-1.5 text-sm font-medium text-white transition hover:opacity-90"
                   >
                     Save
                   </button>
                   <button
                     onClick={cancelEdit}
-                    className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition hover:bg-dark-700 hover:text-gray-200"
+                    className="rounded-lg px-3 py-1.5 text-sm text-theme-muted transition hover:bg-theme-accent/10 hover:text-theme-primary"
                   >
                     Cancel
                   </button>
@@ -265,23 +265,23 @@ export default function ProjectForm({
             ) : (
               <div className="flex items-center justify-between">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium text-gray-100">
+                  <p className="truncate font-medium text-theme-primary">
                     {project.title}
                   </p>
-                  <p className="truncate text-sm text-gray-400">
+                  <p className="truncate text-sm text-theme-secondary">
                     {project.techStack}
                   </p>
                 </div>
                 <div className="ml-3 flex gap-2">
                   <button
                     onClick={() => startEdit(project)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-accent transition hover:bg-accent/10"
+                    className="rounded-lg px-3 py-1.5 text-sm text-theme-accent transition hover:bg-theme-accent/10"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleToggleVisibility(project)}
-                    className="rounded-lg px-3 py-1.5 text-sm text-gray-400 transition hover:bg-dark-700 hover:text-gray-200"
+                    className="rounded-lg px-3 py-1.5 text-sm text-theme-muted transition hover:bg-theme-accent/10 hover:text-theme-primary"
                     title={project.visible ? "Hide project" : "Show project"}
                   >
                     {project.visible ? "Hide" : "Show"}
