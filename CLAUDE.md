@@ -6,6 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A professional showcase web app (evolved from a Linktree clone) where users have public profile pages displaying links, projects, and contact info. Features a dark theme with teal/cyan accents. Built with Next.js 16 (App Router), Tailwind CSS v4, Prisma ORM with SQLite, and TypeScript.
 
+## Documentation
+
+- **[TECH_STACK.md](./TECH_STACK.md)** — Full technology stack with versions, configuration details, and project structure
+- **[CHANGELOG.md](./CHANGELOG.md)** — History of all changes organized by commit
+- **[chatlog.md](./chatlog.md)** — Claude Code session logs and design decisions
+
 ## Commands
 
 ```bash
