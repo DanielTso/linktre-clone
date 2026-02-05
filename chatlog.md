@@ -30,6 +30,64 @@ User was asked how they'd like to apply the design. Session continued with docum
 
 ---
 
+## 2026-02-05 — Theme System & Resume Button Implementation
+
+### Plan Executed
+Implemented the Figma-inspired design plan with dual theme support.
+
+### Changes Made
+
+#### 1. Dual Theme System (`e42cc4f`)
+- **ThemeProvider** — React context managing theme state with localStorage persistence
+- **ThemeToggle** — Fixed top-right button with Sun/Moon icons from lucide-react
+- **CSS Variables** — `:root` (light) and `.dark` (dark) in `globals.css`
+- **Tailwind v4 fix** — Added `@variant dark (&:where(.dark, .dark *));` for class-based dark mode
+- Theme-aware utilities: `text-theme-primary`, `text-theme-accent`, `bg-theme-accent`, etc.
+
+#### 2. Homepage Redesign
+- Centered Linktree-style layout showing featured user profile
+- Avatar with gradient ring (purple/pink light, teal dark)
+- Vertical link cards with category icons and arrow hover animation
+
+#### 3. LinkCard Updates
+- Added lucide-react icons based on category:
+  - `Briefcase` — professional
+  - `Users` — social
+  - `BookOpen` — learning
+  - `Link` — general
+- Arrow slides right on hover
+
+#### 4. Resume Button Feature (`e8b062a`, `a6f8429`)
+- Added `resumeUrl` field to User model in Prisma
+- Created `ResumeButton` component with FileDown icon
+- Displayed on homepage and profile pages when URL is set
+- Added resume URL editing in ProfileEditForm
+- Fixed API route to accept `resumeUrl` field
+
+#### 5. Admin Dashboard Theme Fix (`c482aba`)
+- Replaced hardcoded dark colors with theme-aware CSS variables
+- Fixed in: `admin/page.tsx`, `ProfileEditForm.tsx`, `LinkForm.tsx`, `ProjectForm.tsx`
+- Admin now works correctly in both light and dark modes
+
+#### 6. Documentation Updates (`975b2e5`)
+- Updated `CLAUDE.md` with resumeUrl field and ResumeButton component
+- Updated `TECH_STACK.md` with lucide-react, theme system, new components
+- Updated `CHANGELOG.md` with all new commits
+
+### Key Technical Lessons
+- **Tailwind v4 dark mode**: Defaults to media query, not class-based. Must add `@variant dark (&:where(.dark, .dark *));` directive
+- **CSS variables in @theme blocks**: Cannot use `rgba()` — move to `@layer base` instead
+- **Prisma API routes**: Must explicitly whitelist fields in ALLOWED_FIELDS Set
+
+### Current State
+- Homepage shows featured user (Daniel Tso) with links and resume button
+- Full profile page at `/danieltso` with projects, categorized links, contact info
+- Admin dashboard at `/admin` for managing users, links, projects
+- Theme toggle persists preference in localStorage
+- All commits pushed to GitHub
+
+---
+
 ## 2026-02-04 — Documentation Setup
 
 ### Tasks Completed
