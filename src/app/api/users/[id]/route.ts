@@ -12,6 +12,7 @@ const ALLOWED_FIELDS = new Set([
   "company",
   "email",
   "avatarUrl",
+  "resumeUrl",
   "featured",
 ]);
 
