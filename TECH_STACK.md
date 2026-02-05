@@ -18,9 +18,34 @@
 
 ### Tailwind v4 Notes
 - No `tailwind.config.js` — configuration is done in `globals.css` via `@theme` blocks
-- Custom dark theme with teal/cyan accents (`--color-accent: #14b8a6`)
+- Class-based dark mode requires `@variant dark (&:where(.dark, .dark *));` directive
+- `rgba()` colors must live outside `@theme` blocks (use `@layer base` CSS variables instead)
 - Glass morphism utilities (`.glass-card`, `.glow-hover`) defined in `@layer utilities`
-- `rgba()` colors must live outside `@theme` blocks (in `@layer base` CSS variables instead)
+
+## Icons
+
+| Technology | Version | Purpose |
+|---|---|---|
+| [lucide-react](https://lucide.dev/) | 0.513.0 | Icon library for theme toggle, link cards, project cards |
+
+### Icon Usage
+- `Sun`/`Moon` — Theme toggle button
+- `Briefcase`/`Users`/`BookOpen`/`Link` — Category icons for link cards
+- `ExternalLink`/`Github`/`FileDown` — Action icons for projects and resume
+
+## Theme System
+
+Dual theme support with CSS variables in `globals.css`:
+
+| Theme | Background | Accent | Cards |
+|---|---|---|---|
+| Light (default) | Purple/blue gradient | Purple (#9333ea) | White with shadow |
+| Dark | Dark slate (#0f172a) | Teal (#14b8a6) | Glass morphism |
+
+Key CSS utilities:
+- `text-theme-primary`, `text-theme-secondary`, `text-theme-muted`, `text-theme-accent`
+- `bg-theme-accent`, `border-theme-accent`
+- Theme persisted via localStorage, respects system preference on first load
 
 ## Database
 
@@ -30,7 +55,7 @@
 | [SQLite](https://www.sqlite.org/) | — | File-based database (`prisma/dev.db`) |
 
 ### Prisma Models
-- **User** — Profile with username, name, bio, avatar, title, company, email, featured flag
+- **User** — Profile with username, name, bio, avatar, title, company, email, resumeUrl, featured flag
 - **Link** — Categorized links (professional/social/learning/general) with ordering and visibility
 - **Project** — Portfolio projects with tech stack, URLs, ordering, and visibility
 
@@ -80,12 +105,15 @@ src/
 │   └── page.tsx                # Server component — homepage
 ├── components/
 │   ├── ConfirmDialog.tsx       # Confirmation modal
-│   ├── LinkCard.tsx            # Link display card
+│   ├── LinkCard.tsx            # Link display card with category icons
 │   ├── LinkForm.tsx            # Link CRUD form
 │   ├── ProfileEditForm.tsx     # Profile inline editing
 │   ├── ProfileHeader.tsx       # User profile header
 │   ├── ProjectCard.tsx         # Project display card
 │   ├── ProjectForm.tsx         # Project CRUD form
+│   ├── ResumeButton.tsx        # Resume download button
+│   ├── ThemeProvider.tsx       # Theme context with localStorage
+│   ├── ThemeToggle.tsx         # Sun/Moon theme toggle
 │   └── Toast.tsx               # Notification component
 └── lib/
     └── prisma.ts               # Prisma singleton (globalThis caching)

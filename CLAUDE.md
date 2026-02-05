@@ -34,7 +34,7 @@ After changing `prisma/schema.prisma`, run `npm run db:push` then `npm run db:ge
 ### Data Model
 
 Three models in `prisma/schema.prisma`:
-- **User** — `id`, `username` (unique), `name`, `bio`, `avatarUrl`, `title`, `company`, `email`, `featured`, has many Links and Projects
+- **User** — `id`, `username` (unique), `name`, `bio`, `avatarUrl`, `title`, `company`, `email`, `resumeUrl`, `featured`, has many Links and Projects
 - **Link** — `id`, `title`, `url`, `order`, `visible`, `category` (general/professional/social/learning), belongs to User
 - **Project** — `id`, `title`, `description`, `imageUrl`, `techStack` (comma-separated), `projectUrl`, `githubUrl`, `order`, `visible`, belongs to User
 
@@ -82,6 +82,7 @@ Key CSS utilities:
 
 - `ThemeProvider` — Client component providing theme context with localStorage persistence
 - `ThemeToggle` — Client component with sun/moon icon button, fixed top-right position
+- `ResumeButton` — Server-compatible, prominent download button for user resume (visible when resumeUrl set)
 - `ProfileHeader` — Server-compatible, displays user avatar with gradient ring/name/bio/title/company
 - `ProfileEditForm` — Client component for inline profile editing in admin dashboard
 - `LinkCard` — Server-compatible, renders link with category icon (lucide-react) and arrow hover animation
