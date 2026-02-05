@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import LinkForm from "@/components/LinkForm";
 import ProjectForm from "@/components/ProjectForm";
+import ProfileEditForm from "@/components/ProfileEditForm";
+import { ToastProvider, useToast } from "@/components/Toast";
 
 interface Link {
   id: string;
@@ -29,14 +31,25 @@ interface User {
   username: string;
   name: string;
   bio: string | null;
+  avatarUrl: string | null;
   title: string | null;
   company: string | null;
   email: string | null;
+  featured: boolean;
   links: Link[];
   projects: Project[];
 }
 
 export default function AdminPage() {
+  return (
+    <ToastProvider>
+      <AdminContent />
+    </ToastProvider>
+  );
+}
+
+function AdminContent() {
+  const { showToast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [newUsername, setNewUsername] = useState("");
@@ -48,10 +61,15 @@ export default function AdminPage() {
   const [creating, setCreating] = useState(false);
 
   const fetchUsers = useCallback(async () => {
-    const res = await fetch("/api/users");
-    const data = await res.json();
-    setUsers(data);
-  }, []);
+    try {
+      const res = await fetch("/api/users");
+      if (!res.ok) throw new Error("Failed to fetch users");
+      const data = await res.json();
+      setUsers(data);
+    } catch {
+      showToast("Failed to load users", "error");
+    }
+  }, [showToast]);
 
   useEffect(() => {
     fetchUsers();
@@ -62,32 +80,47 @@ export default function AdminPage() {
     if (!newUsername.trim() || !newName.trim()) return;
 
     setCreating(true);
-    const res = await fetch("/api/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: newUsername,
-        name: newName,
-        bio: newBio || null,
-        title: newTitle || null,
-        company: newCompany || null,
-        email: newEmail || null,
-      }),
-    });
+    try {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: newUsername,
+          name: newName,
+          bio: newBio || null,
+          title: newTitle || null,
+          company: newCompany || null,
+          email: newEmail || null,
+        }),
+      });
 
-    if (res.ok) {
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to create user");
+      }
+
       setNewUsername("");
       setNewName("");
       setNewBio("");
       setNewTitle("");
       setNewCompany("");
       setNewEmail("");
+      showToast("Profile created", "success");
       await fetchUsers();
+    } catch (err) {
+      showToast(
+        err instanceof Error ? err.message : "Failed to create profile",
+        "error"
+      );
+    } finally {
+      setCreating(false);
     }
-    setCreating(false);
   }
 
   const selectedUser = users.find((u) => u.id === selectedUserId);
+
+  const inputClass =
+    "rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-4 py-16">
@@ -107,7 +140,7 @@ export default function AdminPage() {
             value={newUsername}
             onChange={(e) => setNewUsername(e.target.value)}
             pattern="^[a-zA-Z0-9_-]+$"
-            className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className={inputClass}
             required
           />
           <input
@@ -115,7 +148,7 @@ export default function AdminPage() {
             placeholder="Display name"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className={inputClass}
             required
           />
           <input
@@ -123,27 +156,27 @@ export default function AdminPage() {
             placeholder="Title (e.g. Software Engineer)"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className={inputClass}
           />
           <input
             type="text"
             placeholder="Company (e.g. Acme Inc.)"
             value={newCompany}
             onChange={(e) => setNewCompany(e.target.value)}
-            className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className={inputClass}
           />
           <input
             type="email"
             placeholder="Email (optional)"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
-            className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className={inputClass}
           />
           <textarea
             placeholder="Bio (optional)"
             value={newBio}
             onChange={(e) => setNewBio(e.target.value)}
-            className="rounded-xl border border-dark-600 bg-dark-800 px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className={inputClass}
             rows={2}
           />
           <button
@@ -173,6 +206,11 @@ export default function AdminPage() {
                     : "border border-dark-600 text-gray-400 hover:border-accent hover:text-accent"
                 }`}
               >
+                {user.featured && (
+                  <span className="mr-1" title="Featured profile">
+                    ★
+                  </span>
+                )}
                 @{user.username}
               </button>
             ))}
@@ -180,9 +218,20 @@ export default function AdminPage() {
         </section>
       )}
 
-      {/* Link Management */}
+      {/* Profile Edit + Content Management */}
       {selectedUser && (
         <>
+          <section className="glass-card mb-6 p-6">
+            <h3 className="mb-4 text-lg font-semibold text-gray-100">
+              Profile
+            </h3>
+            <ProfileEditForm
+              key={selectedUser.id}
+              user={selectedUser}
+              onUpdate={fetchUsers}
+            />
+          </section>
+
           <section className="glass-card mb-6 p-6">
             <h3 className="mb-4 text-lg font-semibold text-gray-100">
               Links for @{selectedUser.username}
