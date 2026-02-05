@@ -57,7 +57,7 @@ Three models in `prisma/schema.prisma`:
 - **Server Components** for public pages (`/`, `/[username]`) — data fetched directly via Prisma, no API calls needed.
 - **Client Component** for admin (`/admin`) — uses `fetch()` against API routes for mutations, `useCallback` for stable data refresh.
 - **Dynamic route params** use the Next.js 16 async `params` pattern: `const { username } = await params;`
-- **Tailwind CSS v4** with `@import "tailwindcss"` in `globals.css` (no `tailwind.config` file needed). Custom dark theme colors and glass-card/glow-hover utilities defined in `@theme` and `@layer utilities` blocks.
+- **Tailwind CSS v4** with `@import "tailwindcss"` in `globals.css` (no `tailwind.config` file needed). Custom dark theme colors and glass-card/glow-hover utilities defined in `@theme` and `@layer utilities` blocks. Note: `rgba()` colors must live outside `@theme` blocks (use `@layer base` CSS variables instead).
 - **Path alias**: `@/*` maps to `./src/*`.
 - **Featured user**: The homepage queries for `featured: true` to display a hero section; other users appear below.
 - **Link categories**: Links are grouped by category (professional, social, learning, general) on the profile page.
@@ -65,7 +65,10 @@ Three models in `prisma/schema.prisma`:
 ### Component Structure
 
 - `ProfileHeader` — Server-compatible, displays user avatar/name/bio/title/company
+- `ProfileEditForm` — Client component for inline profile editing in admin dashboard
 - `LinkCard` — Server-compatible, renders a single clickable link with glass-card styling
 - `LinkForm` — Client component with add/delete/toggle-visibility for links, includes category selector
 - `ProjectCard` — Server-compatible, renders project with description, tech stack pills, and action links
 - `ProjectForm` — Client component with add/delete/toggle-visibility for projects
+- `Toast` — Client component for success/error notification messages
+- `ConfirmDialog` — Client component for destructive action confirmations
