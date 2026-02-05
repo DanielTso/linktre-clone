@@ -16,6 +16,7 @@ model User {
   title     String?
   company   String?
   email     String?
+  resumeUrl String?
   featured  Boolean   @default(false)
   links     Link[]
   projects  Project[]

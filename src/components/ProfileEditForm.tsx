@@ -12,6 +12,7 @@ interface User {
   title: string | null;
   company: string | null;
   email: string | null;
+  resumeUrl: string | null;
   featured: boolean;
 }
 
@@ -34,6 +35,7 @@ export default function ProfileEditForm({
   const [company, setCompany] = useState(user.company ?? "");
   const [email, setEmail] = useState(user.email ?? "");
   const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl ?? "");
+  const [resumeUrl, setResumeUrl] = useState(user.resumeUrl ?? "");
   const [featured, setFeatured] = useState(user.featured);
 
   useEffect(() => {
@@ -44,8 +46,9 @@ export default function ProfileEditForm({
     setCompany(user.company ?? "");
     setEmail(user.email ?? "");
     setAvatarUrl(user.avatarUrl ?? "");
+    setResumeUrl(user.resumeUrl ?? "");
     setFeatured(user.featured);
-  }, [user.id, user.name, user.bio, user.title, user.company, user.email, user.avatarUrl, user.featured]);
+  }, [user.id, user.name, user.bio, user.title, user.company, user.email, user.avatarUrl, user.resumeUrl, user.featured]);
 
   function handleCancel() {
     setName(user.name);
@@ -54,6 +57,7 @@ export default function ProfileEditForm({
     setCompany(user.company ?? "");
     setEmail(user.email ?? "");
     setAvatarUrl(user.avatarUrl ?? "");
+    setResumeUrl(user.resumeUrl ?? "");
     setFeatured(user.featured);
     setEditing(false);
   }
@@ -69,6 +73,8 @@ export default function ProfileEditForm({
       if ((email || null) !== user.email) data.email = email || null;
       if ((avatarUrl || null) !== user.avatarUrl)
         data.avatarUrl = avatarUrl || null;
+      if ((resumeUrl || null) !== user.resumeUrl)
+        data.resumeUrl = resumeUrl || null;
       if (featured !== user.featured) data.featured = featured;
 
       if (Object.keys(data).length === 0) {
@@ -119,6 +125,9 @@ export default function ProfileEditForm({
           )}
           {user.email && (
             <p className="mt-1 text-sm text-gray-500">{user.email}</p>
+          )}
+          {user.resumeUrl && (
+            <p className="mt-1 text-sm text-accent">Resume uploaded</p>
           )}
           {user.featured && (
             <span className="mt-2 inline-block rounded-full bg-accent/20 px-2 py-0.5 text-xs text-accent">
@@ -172,6 +181,13 @@ export default function ProfileEditForm({
         placeholder="Avatar URL"
         value={avatarUrl}
         onChange={(e) => setAvatarUrl(e.target.value)}
+        className={inputClass}
+      />
+      <input
+        type="url"
+        placeholder="Resume URL (PDF link or file path)"
+        value={resumeUrl}
+        onChange={(e) => setResumeUrl(e.target.value)}
         className={inputClass}
       />
       <textarea

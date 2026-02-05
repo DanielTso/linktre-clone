@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import ProfileHeader from "@/components/ProfileHeader";
 import LinkCard from "@/components/LinkCard";
 import ProjectCard from "@/components/ProjectCard";
+import ResumeButton from "@/components/ResumeButton";
 import { Mail } from "lucide-react";
 
 interface Props {
@@ -58,6 +59,13 @@ export default async function UserProfilePage({ params }: Props) {
         title={user.title}
         company={user.company}
       />
+
+      {/* Resume Button */}
+      {user.resumeUrl && (
+        <section className="w-full max-w-md">
+          <ResumeButton url={user.resumeUrl} />
+        </section>
+      )}
 
       {/* Featured Projects */}
       {user.projects.length > 0 && (

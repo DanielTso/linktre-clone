@@ -35,6 +35,7 @@ interface User {
   title: string | null;
   company: string | null;
   email: string | null;
+  resumeUrl: string | null;
   featured: boolean;
   links: Link[];
   projects: Project[];

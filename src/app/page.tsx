@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import LinkCard from "@/components/LinkCard";
+import ResumeButton from "@/components/ResumeButton";
 
 export default async function HomePage() {
   const featured = await prisma.user.findFirst({
@@ -74,6 +75,13 @@ export default async function HomePage() {
           </p>
         )}
       </section>
+
+      {/* Resume Button */}
+      {featured.resumeUrl && (
+        <section className="mb-4 w-full">
+          <ResumeButton url={featured.resumeUrl} />
+        </section>
+      )}
 
       {/* Links Section */}
       {featured.links.length > 0 && (
