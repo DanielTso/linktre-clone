@@ -44,8 +44,8 @@ Three models in `prisma/schema.prisma`:
 
 | Route | Type | Purpose |
 |---|---|---|
-| `/` | Server Component | Homepage showing featured user profile with links (Linktree-style layout) |
-| `/[username]` | Server Component | Full showcase: profile header, projects grid, categorized links, contact footer |
+| `/` | Server Component | Homepage: profile card + "Connect With Me" link portal (Portfolio, social, learning links) |
+| `/[username]` | Server Component | Portfolio page: About Me card with expertise pills, projects grid, contact footer |
 | `/login` | Client Component | Password login page (redirects to `/admin` on success) |
 | `/admin` | Client Component | Dashboard to create users (with title/company/email) and manage links + projects |
 | `/api/auth/login` | API Route | POST: validate password, set session cookie |
@@ -91,15 +91,16 @@ Key CSS utilities:
 - **Dynamic route params** use the Next.js 16 async `params` pattern: `const { username } = await params;`
 - **Tailwind CSS v4** with `@import "tailwindcss"` in `globals.css` (no `tailwind.config` file needed). Note: `rgba()` colors must live outside `@theme` blocks (use `@layer base` CSS variables instead). Class-based dark mode requires `@variant dark (&:where(.dark, .dark *));`.
 - **Path alias**: `@/*` maps to `./src/*`.
-- **Featured user**: The homepage shows the featured user's profile directly in a centered Linktree-style layout. Only one user can be featured at a time — setting `featured: true` on one user clears it from all others (via Prisma `$transaction` in `/api/users/[id]`).
-- **Link categories**: Links are grouped by category (professional, social, learning, general) on the full profile page.
+- **Featured user**: The homepage shows the featured user's profile card (avatar, name, title) with a "Connect With Me" link portal below. A "Portfolio" link card at the top links to the full profile page. Only one user can be featured at a time — setting `featured: true` on one user clears it from all others (via Prisma `$transaction` in `/api/users/[id]`).
+- **Portfolio page**: The `/[username]` page shows an "About Me" glass card with bio and expertise highlight pills (Construction PM, AI Engineer, Business Owner), followed by a projects grid and contact email. Links are not shown here — they live on the homepage.
+- **Link categories**: Links are grouped by category (professional, social, learning, general) on the homepage link portal.
 - **API field allowlisting**: The user PATCH endpoint uses an `ALLOWED_FIELDS` set to filter request body keys before passing to Prisma. New User fields must be added to this set in `src/app/api/users/[id]/route.ts` to be editable.
 
 ### Components (`src/components/`)
 
 All components live in a flat directory. The split between server-compatible and client components matters:
 
-- **Server-compatible** (no `"use client"`): `ProfileHeader`, `LinkCard`, `ProjectCard`, `ResumeButton` — used directly in server-rendered pages (`/`, `/[username]`)
+- **Server-compatible** (no `"use client"`): `ProfileHeader`, `LinkCard`, `ProjectCard`, `ResumeButton` — used directly in server-rendered pages. `ProfileHeader` no longer includes bio (moved to About Me section on portfolio page). `ResumeButton` exists but is currently unused.
 - **Client components** (`"use client"`): `ThemeProvider`, `ThemeToggle`, `ProfileEditForm`, `LinkForm`, `ProjectForm`, `Toast`, `ConfirmDialog` — used in layout or admin dashboard
 
 The admin page wraps its content in `<ToastProvider>` for notification support. `ConfirmDialog` is used for destructive actions (delete link/project).

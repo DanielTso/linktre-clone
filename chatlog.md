@@ -88,6 +88,51 @@ Implemented the Figma-inspired design plan with dual theme support.
 
 ---
 
+## 2026-02-06 — Homepage & Portfolio Redesign
+
+### Plan
+Redesign homepage into two sections: a compact profile card and a link portal. Move bio and detailed info to a dedicated portfolio page.
+
+### Changes Made
+
+#### 1. Homepage Redesign (`2593546`)
+- Profile section wrapped in `glass-card` with padding
+- Removed bio and `@username` from homepage
+- Changed title/company separator from "@" to "|"
+- Widened container from `max-w-md` to `max-w-lg`
+- Added "Connect With Me" heading above link cards
+- Removed `ResumeButton` import (component still exists)
+
+#### 2. Portfolio Link Card
+- Initially pointed to `resumeUrl` (resume PDF) — user corrected this
+- Changed to point to `/${featured.username}` (the portfolio page)
+- Uses `professional` category (briefcase icon)
+
+#### 3. Portfolio Page Redesign (`311cae8`)
+- Added "About Me" glass card with bio text and expertise highlight pills:
+  - `HardHat` — Construction PM
+  - `BrainCircuit` — AI Engineer
+  - `Building2` — Business Owner
+- Removed categorized links section (links live on homepage only)
+- Removed resume button (user prefers to send manually)
+- Added "Back to Home" link in footer
+- ProfileHeader: removed `bio` prop, uses "|" separator
+
+#### 4. Data Fixes
+- Email corrected from `daniel@crafts2build.com` to `danieltso@crafts2buildllc.com` in seed script
+- Re-seeded database
+
+#### 5. Housekeeping
+- Added `*.png` to `.gitignore` for screenshots
+
+### Key Decisions
+- User wants Portfolio link card on homepage to go to full profile page, not resume PDF
+- User doesn't want resume button — will send resume manually if asked
+- Categorized links (Professional, Social, Learning) stay on homepage only, not duplicated on portfolio page
+- Bio belongs on portfolio page only, not homepage
+
+---
+
 ## 2026-02-04 — Documentation Setup
 
 ### Tasks Completed

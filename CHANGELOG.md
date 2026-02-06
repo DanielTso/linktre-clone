@@ -8,6 +8,32 @@ All notable changes to this project are documented here.
 
 ---
 
+## 2026-02-06 — Homepage & Portfolio Redesign
+**Commits:** `2593546`, `311cae8`
+
+### Changed
+- Homepage redesigned with profile card (glass-card with avatar, name, title) and "Connect With Me" link portal
+- Bio removed from homepage — now only on portfolio page
+- Added "Portfolio" link card at top of homepage links, pointing to `/username`
+- Container widened from `max-w-md` to `max-w-lg`
+- Title/company separator changed from "@" to "|" throughout
+- ProfileHeader component: removed `bio` prop
+
+### Added
+- Portfolio page (`/[username]`): "About Me" glass card with bio and expertise highlight pills (Construction PM, AI Engineer, Business Owner) using lucide-react icons
+- "Back to Home" link in portfolio page footer
+
+### Removed
+- Categorized links section from portfolio page (links live on homepage only)
+- Resume button from portfolio page
+- `@username` display from homepage profile card
+
+### Fixed
+- Email corrected to `danieltso@crafts2buildllc.com` in seed data
+- Added `*.png` to `.gitignore` for screenshots
+
+---
+
 ## 2026-02-05 — Admin Theme Fix
 **Commit:** `c482aba`
 

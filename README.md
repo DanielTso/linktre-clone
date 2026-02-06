@@ -1,22 +1,24 @@
 # Daniel Tso | Professional Showcase
 
-A dark-themed professional showcase web app — a link-in-bio tool with project portfolios, categorized links, and multi-user support. Built with Next.js 16, Tailwind CSS v4, Prisma, and SQLite.
+A professional showcase web app — a link-in-bio portal with a portfolio page featuring projects, an About Me section, and multi-user support. Dual theme system with light (purple/blue gradient) and dark (teal accents) modes. Built with Next.js 16, Tailwind CSS v4, Prisma, and SQLite.
 
 ## Features
 
-- **Featured Profile Hero** — Highlighted user displayed prominently on the homepage
+- **Profile Card Homepage** — Clean profile card with avatar, name, and title linking to a "Connect With Me" link portal
+- **Portfolio Page** — About Me card with expertise highlight pills, featured projects grid, and contact email
 - **Project Portfolio** — Showcase projects with descriptions, tech stack pills, and live/GitHub links
-- **Categorized Links** — Links grouped by category (Professional, Social, Learning, General)
-- **Contact Footer** — Email contact link on profile pages
+- **Categorized Links** — Links grouped by category (Professional, Social, Learning, General) on the homepage
+- **Dual Theme System** — Light (purple) and dark (teal) themes with localStorage persistence
 - **Admin Dashboard** — Create profiles and manage links + projects through a web UI
 - **Multi-User Support** — Multiple profiles with independent links and projects
-- **Dark Theme** — Dark slate backgrounds with teal/cyan accents, glass-morphism cards, and glow hover effects
+- **Password Auth** — HMAC-SHA256 session cookies for admin access
 
 ## Tech Stack
 
 - **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
 - **Language:** TypeScript
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Icons:** [lucide-react](https://lucide.dev/)
 - **Database:** SQLite via [Prisma ORM](https://www.prisma.io/)
 - **Runtime:** Node.js 20+
 
@@ -56,25 +58,31 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```
 src/
 ├── app/
-│   ├── page.tsx              # Homepage with featured hero
-│   ├── [username]/page.tsx   # Profile showcase page
+│   ├── page.tsx              # Homepage — profile card + link portal
+│   ├── [username]/page.tsx   # Portfolio — About Me, projects, contact
 │   ├── admin/page.tsx        # Admin dashboard
+│   ├── login/page.tsx        # Login page
 │   ├── api/
-│   │   ├── users/route.ts    # User CRUD
-│   │   ├── links/route.ts    # Link creation
-│   │   ├── links/[id]/       # Link update/delete
-│   │   ├── projects/route.ts # Project creation
-│   │   └── projects/[id]/    # Project update/delete
+│   │   ├── auth/             # Login/logout routes
+│   │   ├── users/            # User CRUD
+│   │   ├── links/            # Link CRUD
+│   │   └── projects/         # Project CRUD
 │   ├── globals.css           # Tailwind v4 theme & utilities
-│   └── layout.tsx            # Root layout with dark theme
+│   └── layout.tsx            # Root layout with ThemeProvider
 ├── components/
-│   ├── ProfileHeader.tsx     # User avatar, name, title, bio
+│   ├── ProfileHeader.tsx     # User avatar, name, title
 │   ├── ProjectCard.tsx       # Project card with tech stack pills
-│   ├── ProjectForm.tsx       # Admin project management form
-│   ├── LinkCard.tsx          # Clickable link with glass styling
-│   └── LinkForm.tsx          # Admin link management form
+│   ├── LinkCard.tsx          # Clickable link with category icon
+│   ├── ThemeProvider.tsx     # Theme context with localStorage
+│   ├── ThemeToggle.tsx       # Sun/Moon theme toggle
+│   ├── ProfileEditForm.tsx   # Admin profile editing
+│   ├── LinkForm.tsx          # Admin link management
+│   ├── ProjectForm.tsx       # Admin project management
+│   ├── Toast.tsx             # Notification component
+│   └── ConfirmDialog.tsx     # Confirmation modal
 ├── lib/
-│   └── prisma.ts             # Prisma client singleton
+│   ├── prisma.ts             # Prisma singleton
+│   └── auth.ts               # HMAC-SHA256 session auth
 └── prisma/
     ├── schema.prisma         # Database schema
     └── seed.ts               # Seed data

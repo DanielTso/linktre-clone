@@ -31,7 +31,9 @@
 ### Icon Usage
 - `Sun`/`Moon` — Theme toggle button
 - `Briefcase`/`Users`/`BookOpen`/`Link` — Category icons for link cards
-- `ExternalLink`/`Github`/`FileDown` — Action icons for projects and resume
+- `ExternalLink`/`Github` — Action icons for projects
+- `HardHat`/`BrainCircuit`/`Building2` — Expertise highlight pills on portfolio page
+- `Mail` — Contact email icon on portfolio page
 
 ## Theme System
 
@@ -99,7 +101,7 @@ src/
 ├── app/
 │   ├── admin/page.tsx          # Client component — admin dashboard
 │   ├── api/                    # API routes (users, links, projects CRUD)
-│   ├── [username]/page.tsx     # Server component — public profile
+│   ├── [username]/page.tsx     # Server component — portfolio page
 │   ├── globals.css             # Tailwind v4 + theme + utilities
 │   ├── layout.tsx              # Root layout
 │   └── page.tsx                # Server component — homepage
@@ -108,10 +110,10 @@ src/
 │   ├── LinkCard.tsx            # Link display card with category icons
 │   ├── LinkForm.tsx            # Link CRUD form
 │   ├── ProfileEditForm.tsx     # Profile inline editing
-│   ├── ProfileHeader.tsx       # User profile header
+│   ├── ProfileHeader.tsx       # User avatar, name, title (no bio)
 │   ├── ProjectCard.tsx         # Project display card
 │   ├── ProjectForm.tsx         # Project CRUD form
-│   ├── ResumeButton.tsx        # Resume download button
+│   ├── ResumeButton.tsx        # Resume download button (currently unused)
 │   ├── ThemeProvider.tsx       # Theme context with localStorage
 │   ├── ThemeToggle.tsx         # Sun/Moon theme toggle
 │   └── Toast.tsx               # Notification component
