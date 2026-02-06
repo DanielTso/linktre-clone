@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { LogOut, ChevronDown, ChevronUp } from "lucide-react";
 import LinkForm from "@/components/LinkForm";
 import ProjectForm from "@/components/ProjectForm";
 import ProfileEditForm from "@/components/ProfileEditForm";
@@ -63,6 +63,7 @@ function AdminContent() {
   const [newCompany, setNewCompany] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [creating, setCreating] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -146,65 +147,77 @@ function AdminContent() {
         </button>
       </div>
 
-      {/* Create User Form */}
-      <section className="glass-card mb-10 p-6">
-        <h2 className="mb-4 text-xl font-semibold text-theme-primary">
-          Create Profile
-        </h2>
-        <form onSubmit={handleCreateUser} className="flex flex-col gap-3">
-          <input
-            type="text"
-            placeholder="Username (e.g. johndoe)"
-            value={newUsername}
-            onChange={(e) => setNewUsername(e.target.value)}
-            pattern="^[a-zA-Z0-9_-]+$"
-            className={inputClass}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Display name"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            className={inputClass}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Title (e.g. Software Engineer)"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            className={inputClass}
-          />
-          <input
-            type="text"
-            placeholder="Company (e.g. Acme Inc.)"
-            value={newCompany}
-            onChange={(e) => setNewCompany(e.target.value)}
-            className={inputClass}
-          />
-          <input
-            type="email"
-            placeholder="Email (optional)"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            className={inputClass}
-          />
-          <textarea
-            placeholder="Bio (optional)"
-            value={newBio}
-            onChange={(e) => setNewBio(e.target.value)}
-            className={inputClass}
-            rows={2}
-          />
-          <button
-            type="submit"
-            disabled={creating}
-            className="rounded-xl bg-theme-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
-          >
-            {creating ? "Creating..." : "Create Profile"}
-          </button>
-        </form>
+      {/* Create User Form (collapsible) */}
+      <section className="glass-card mb-10">
+        <button
+          onClick={() => setShowCreateForm(!showCreateForm)}
+          className="flex w-full items-center justify-between p-6 text-left"
+        >
+          <h2 className="text-xl font-semibold text-theme-primary">
+            Create Profile
+          </h2>
+          {showCreateForm ? (
+            <ChevronUp className="h-5 w-5 text-theme-muted" />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-theme-muted" />
+          )}
+        </button>
+        {showCreateForm && (
+          <form onSubmit={handleCreateUser} className="flex flex-col gap-3 px-6 pb-6">
+            <input
+              type="text"
+              placeholder="Username (e.g. johndoe)"
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+              pattern="^[a-zA-Z0-9_-]+$"
+              className={inputClass}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Display name"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              className={inputClass}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Title (e.g. Software Engineer)"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              className={inputClass}
+            />
+            <input
+              type="text"
+              placeholder="Company (e.g. Acme Inc.)"
+              value={newCompany}
+              onChange={(e) => setNewCompany(e.target.value)}
+              className={inputClass}
+            />
+            <input
+              type="email"
+              placeholder="Email (optional)"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              className={inputClass}
+            />
+            <textarea
+              placeholder="Bio (optional)"
+              value={newBio}
+              onChange={(e) => setNewBio(e.target.value)}
+              className={inputClass}
+              rows={2}
+            />
+            <button
+              type="submit"
+              disabled={creating}
+              className="rounded-xl bg-theme-accent px-6 py-3 font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
+            >
+              {creating ? "Creating..." : "Create Profile"}
+            </button>
+          </form>
+        )}
       </section>
 
       {/* User Selector */}
