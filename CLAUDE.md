@@ -46,10 +46,13 @@ Three models in `prisma/schema.prisma`:
 | `/[username]` | Server Component | Full showcase: profile header, projects grid, categorized links, contact footer |
 | `/admin` | Client Component | Dashboard to create users (with title/company/email) and manage links + projects |
 | `/api/users` | API Route | GET all users (with links & projects), POST create user |
+| `/api/users/[id]` | API Route | PATCH update user (allowlisted fields, featured exclusivity via transaction) |
 | `/api/links` | API Route | POST create link (with category) |
 | `/api/links/[id]` | API Route | PATCH update link, DELETE link |
 | `/api/projects` | API Route | POST create project |
 | `/api/projects/[id]` | API Route | PATCH update project, DELETE project |
+
+**No authentication**: The admin page and all API routes are unprotected. There is no login or session management.
 
 ### Theme System
 
@@ -75,19 +78,15 @@ Key CSS utilities:
 - **Dynamic route params** use the Next.js 16 async `params` pattern: `const { username } = await params;`
 - **Tailwind CSS v4** with `@import "tailwindcss"` in `globals.css` (no `tailwind.config` file needed). Note: `rgba()` colors must live outside `@theme` blocks (use `@layer base` CSS variables instead). Class-based dark mode requires `@variant dark (&:where(.dark, .dark *));`.
 - **Path alias**: `@/*` maps to `./src/*`.
-- **Featured user**: The homepage shows the featured user's profile directly in a centered Linktree-style layout.
+- **Featured user**: The homepage shows the featured user's profile directly in a centered Linktree-style layout. Only one user can be featured at a time — setting `featured: true` on one user clears it from all others (via Prisma `$transaction` in `/api/users/[id]`).
 - **Link categories**: Links are grouped by category (professional, social, learning, general) on the full profile page.
+- **API field allowlisting**: The user PATCH endpoint uses an `ALLOWED_FIELDS` set to filter request body keys before passing to Prisma. New User fields must be added to this set in `src/app/api/users/[id]/route.ts` to be editable.
 
-### Component Structure
+### Components (`src/components/`)
 
-- `ThemeProvider` — Client component providing theme context with localStorage persistence
-- `ThemeToggle` — Client component with sun/moon icon button, fixed top-right position
-- `ResumeButton` — Server-compatible, prominent download button for user resume (visible when resumeUrl set)
-- `ProfileHeader` — Server-compatible, displays user avatar with gradient ring/name/bio/title/company
-- `ProfileEditForm` — Client component for inline profile editing in admin dashboard
-- `LinkCard` — Server-compatible, renders link with category icon (lucide-react) and arrow hover animation
-- `LinkForm` — Client component with add/delete/toggle-visibility for links, includes category selector
-- `ProjectCard` — Server-compatible, renders project with description, tech stack pills, and action links (with lucide-react icons)
-- `ProjectForm` — Client component with add/delete/toggle-visibility for projects
-- `Toast` — Client component for success/error notification messages
-- `ConfirmDialog` — Client component for destructive action confirmations
+All components live in a flat directory. The split between server-compatible and client components matters:
+
+- **Server-compatible** (no `"use client"`): `ProfileHeader`, `LinkCard`, `ProjectCard`, `ResumeButton` — used directly in server-rendered pages (`/`, `/[username]`)
+- **Client components** (`"use client"`): `ThemeProvider`, `ThemeToggle`, `ProfileEditForm`, `LinkForm`, `ProjectForm`, `Toast`, `ConfirmDialog` — used in layout or admin dashboard
+
+The admin page wraps its content in `<ToastProvider>` for notification support. `ConfirmDialog` is used for destructive actions (delete link/project).
