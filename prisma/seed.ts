@@ -12,15 +12,15 @@ async function main() {
     data: {
       username: "danieltso",
       name: "Daniel Tso",
-      bio: "Construction Project Manager turning AI engineer. Building smarter tools for the trades while mastering Linux and full-stack development.",
-      title: "Construction PM & AI Engineering Learner",
+      bio: "Construction Project Manager and business owner at Crafts2Build LLC. AI enthusiast building Construction AI Tools — from estimating and model fine-tuning to agentic AI. On the path to becoming a full AI Engineer.",
+      title: "Construction Project Manager | AI Engineer",
       company: "Crafts2Build LLC",
       email: "daniel@crafts2build.com",
       featured: true,
       links: {
         create: [
           { title: "LinkedIn", url: "https://linkedin.com/in/danieltso", order: 0, category: "professional" },
-          { title: "Crafts2Build LLC", url: "https://crafts2build.com", order: 1, category: "professional" },
+          { title: "Crafts2Build LLC", url: "https://www.crafts2buildllc.com", order: 1, category: "professional" },
           { title: "GitHub", url: "https://github.com/danieltso", order: 2, category: "social" },
           { title: "X / Twitter", url: "https://x.com/danieltso", order: 3, category: "social" },
           { title: "Udemy Learning Profile", url: "https://udemy.com/user/danieltso", order: 4, category: "learning" },
