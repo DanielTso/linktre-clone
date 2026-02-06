@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 import LinkForm from "@/components/LinkForm";
 import ProjectForm from "@/components/ProjectForm";
 import ProfileEditForm from "@/components/ProfileEditForm";
@@ -50,6 +52,7 @@ export default function AdminPage() {
 }
 
 function AdminContent() {
+  const router = useRouter();
   const { showToast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -118,6 +121,11 @@ function AdminContent() {
     }
   }
 
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+  }
+
   const selectedUser = users.find((u) => u.id === selectedUserId);
 
   const inputClass =
@@ -125,9 +133,18 @@ function AdminContent() {
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-4 py-16">
-      <h1 className="mb-8 text-3xl font-bold text-theme-primary">
-        Admin Dashboard
-      </h1>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-theme-primary">
+          Admin Dashboard
+        </h1>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 rounded-xl border border-theme-muted/30 px-4 py-2 text-sm font-medium text-theme-secondary transition hover:border-red-400 hover:text-red-500"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
+      </div>
 
       {/* Create User Form */}
       <section className="glass-card mb-10 p-6">

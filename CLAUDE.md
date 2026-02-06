@@ -27,7 +27,9 @@ npm run db:studio    # Open Prisma Studio GUI
 
 After changing `prisma/schema.prisma`, run `npm run db:push` then `npm run db:generate`.
 
-**Environment**: Requires `.env` with `DATABASE_URL="file:./dev.db"` (already present, not gitignored). No other env vars needed.
+**Environment**: Requires `.env` with:
+- `DATABASE_URL="file:./dev.db"` (already present, not gitignored)
+- `ADMIN_PASSWORD="changeme"` (set your own password for admin access)
 
 ## Architecture
 
@@ -44,7 +46,10 @@ Three models in `prisma/schema.prisma`:
 |---|---|---|
 | `/` | Server Component | Homepage showing featured user profile with links (Linktree-style layout) |
 | `/[username]` | Server Component | Full showcase: profile header, projects grid, categorized links, contact footer |
+| `/login` | Client Component | Password login page (redirects to `/admin` on success) |
 | `/admin` | Client Component | Dashboard to create users (with title/company/email) and manage links + projects |
+| `/api/auth/login` | API Route | POST: validate password, set session cookie |
+| `/api/auth/logout` | API Route | POST: clear session cookie |
 | `/api/users` | API Route | GET all users (with links & projects), POST create user |
 | `/api/users/[id]` | API Route | PATCH update user (allowlisted fields, featured exclusivity via transaction) |
 | `/api/links` | API Route | POST create link (with category) |
@@ -52,7 +57,15 @@ Three models in `prisma/schema.prisma`:
 | `/api/projects` | API Route | POST create project |
 | `/api/projects/[id]` | API Route | PATCH update project, DELETE project |
 
-**No authentication**: The admin page and all API routes are unprotected. There is no login or session management.
+### Authentication
+
+Password-based admin auth using HMAC-SHA256 session cookies (no npm dependencies — uses Web Crypto API):
+
+- **`ADMIN_PASSWORD`** env var is the single shared password. Changing it invalidates all sessions.
+- **`src/lib/auth.ts`**: `createSessionToken()` / `verifySessionToken()` — payload is `{ role, iat }` signed with HMAC-SHA256.
+- **`src/middleware.ts`**: Protects `/admin/*` (redirect to `/login`) and `/api/*` (401 JSON). Exempts `/api/auth/*`.
+- **Cookie**: `admin_session`, httpOnly, secure in production, sameSite lax, 7-day expiry.
+- Public pages (`/`, `/[username]`) are unaffected — not in the middleware matcher.
 
 ### Theme System
 
