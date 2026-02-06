@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import LinkCard from "@/components/LinkCard";
-import ResumeButton from "@/components/ResumeButton";
 
 export default async function HomePage() {
   const featured = await prisma.user.findFirst({
@@ -31,11 +30,11 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 py-16">
-      {/* Profile Section */}
-      <section className="mb-8 flex w-full flex-col items-center text-center">
+    <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center px-4 py-16">
+      {/* Profile Card */}
+      <section className="glass-card mb-10 w-full p-8 text-center">
         {/* Avatar with ring */}
-        <div className="mb-4 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 p-1 dark:from-teal-400 dark:via-cyan-500 dark:to-blue-500">
+        <div className="mb-4 inline-block rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 p-1 dark:from-teal-400 dark:via-cyan-500 dark:to-blue-500">
           {featured.avatarUrl ? (
             <img
               src={featured.avatarUrl}
@@ -49,11 +48,6 @@ export default async function HomePage() {
           )}
         </div>
 
-        {/* Username */}
-        <p className="mb-1 text-sm font-medium text-theme-muted">
-          @{featured.username}
-        </p>
-
         {/* Name */}
         <h1 className="mb-1 text-2xl font-bold text-theme-primary">
           {featured.name}
@@ -61,43 +55,49 @@ export default async function HomePage() {
 
         {/* Title & Company */}
         {(featured.title || featured.company) && (
-          <p className="mb-2 text-sm font-medium text-theme-accent">
+          <p className="mb-3 text-sm font-medium text-theme-accent">
             {featured.title}
-            {featured.title && featured.company && " @ "}
+            {featured.title && featured.company && " | "}
             {featured.company}
           </p>
         )}
 
         {/* Bio */}
         {featured.bio && (
-          <p className="max-w-sm text-sm leading-relaxed text-theme-secondary">
+          <p className="mx-auto mb-5 max-w-sm text-sm leading-relaxed text-theme-secondary">
             {featured.bio}
           </p>
         )}
+
       </section>
 
-      {/* Resume Button */}
-      {featured.resumeUrl && (
-        <section className="mb-4 w-full">
-          <ResumeButton url={featured.resumeUrl} />
-        </section>
-      )}
-
       {/* Links Section */}
-      {featured.links.length > 0 && (
-        <section className="flex w-full flex-col gap-3">
-          {featured.links.map((link) => (
-            <LinkCard
-              key={link.id}
-              title={link.title}
-              url={link.url}
-              category={link.category}
-            />
-          ))}
+      {(featured.links.length > 0 || featured.resumeUrl) && (
+        <section className="w-full">
+          <h2 className="mb-4 text-center text-lg font-semibold text-theme-primary">
+            Connect With Me
+          </h2>
+          <div className="flex flex-col gap-3">
+            {featured.resumeUrl && (
+              <LinkCard
+                title="Portfolio"
+                url={featured.resumeUrl}
+                category="professional"
+              />
+            )}
+            {featured.links.map((link) => (
+              <LinkCard
+                key={link.id}
+                title={link.title}
+                url={link.url}
+                category={link.category}
+              />
+            ))}
+          </div>
         </section>
       )}
 
-      {/* Footer Links */}
+      {/* Footer */}
       <footer className="mt-10 flex flex-col items-center gap-4">
         <Link
           href={`/${featured.username}`}
