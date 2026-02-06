@@ -48,3 +48,6 @@ prisma/dev.db-journal
 
 # playwright
 .playwright-mcp/
+
+# screenshots
+*.png

@@ -62,29 +62,20 @@ export default async function HomePage() {
           </p>
         )}
 
-        {/* Bio */}
-        {featured.bio && (
-          <p className="mx-auto mb-5 max-w-sm text-sm leading-relaxed text-theme-secondary">
-            {featured.bio}
-          </p>
-        )}
-
       </section>
 
       {/* Links Section */}
-      {(featured.links.length > 0 || featured.resumeUrl) && (
+      {featured.links.length > 0 && (
         <section className="w-full">
           <h2 className="mb-4 text-center text-lg font-semibold text-theme-primary">
             Connect With Me
           </h2>
           <div className="flex flex-col gap-3">
-            {featured.resumeUrl && (
-              <LinkCard
-                title="Portfolio"
-                url={featured.resumeUrl}
-                category="professional"
-              />
-            )}
+            <LinkCard
+              title="Portfolio"
+              url={`/${featured.username}`}
+              category="professional"
+            />
             {featured.links.map((link) => (
               <LinkCard
                 key={link.id}

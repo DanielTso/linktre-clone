@@ -1,14 +1,19 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import ProfileHeader from "@/components/ProfileHeader";
-import LinkCard from "@/components/LinkCard";
 import ProjectCard from "@/components/ProjectCard";
-import ResumeButton from "@/components/ResumeButton";
-import { Mail } from "lucide-react";
+import { Mail, HardHat, BrainCircuit, Building2 } from "lucide-react";
 
 interface Props {
   params: Promise<{ username: string }>;
 }
+
+const highlights = [
+  { icon: HardHat, label: "Construction PM" },
+  { icon: BrainCircuit, label: "AI Engineer" },
+  { icon: Building2, label: "Business Owner" },
+];
 
 export default async function UserProfilePage({ params }: Props) {
   const { username } = await params;
@@ -16,10 +21,6 @@ export default async function UserProfilePage({ params }: Props) {
   const user = await prisma.user.findUnique({
     where: { username },
     include: {
-      links: {
-        where: { visible: true },
-        orderBy: { order: "asc" },
-      },
       projects: {
         where: { visible: true },
         orderBy: { order: "asc" },
@@ -31,39 +32,37 @@ export default async function UserProfilePage({ params }: Props) {
     notFound();
   }
 
-  // Group links by category
-  const linksByCategory: Record<string, typeof user.links> = {};
-  for (const link of user.links) {
-    const cat = link.category || "general";
-    if (!linksByCategory[cat]) linksByCategory[cat] = [];
-    linksByCategory[cat].push(link);
-  }
-
-  const categoryLabels: Record<string, string> = {
-    professional: "Professional",
-    social: "Social",
-    learning: "Learning",
-    general: "General",
-  };
-
-  const categoryOrder = ["professional", "social", "learning", "general"];
-
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center gap-10 px-4 py-16">
       {/* Hero */}
       <ProfileHeader
         name={user.name}
         username={user.username}
-        bio={user.bio}
         avatarUrl={user.avatarUrl}
         title={user.title}
         company={user.company}
       />
 
-      {/* Resume Button */}
-      {user.resumeUrl && (
-        <section className="w-full max-w-md">
-          <ResumeButton url={user.resumeUrl} />
+      {/* About Me */}
+      {user.bio && (
+        <section className="glass-card w-full p-6">
+          <h2 className="mb-3 text-lg font-semibold text-theme-primary">
+            About Me
+          </h2>
+          <p className="mb-5 leading-relaxed text-theme-secondary">
+            {user.bio}
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {highlights.map(({ icon: Icon, label }) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-2 rounded-full bg-theme-accent/10 px-4 py-2 text-sm font-medium text-theme-accent"
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </span>
+            ))}
+          </div>
         </section>
       )}
 
@@ -88,38 +87,13 @@ export default async function UserProfilePage({ params }: Props) {
         </section>
       )}
 
-      {/* Links grouped by category */}
-      {user.links.length > 0 && (
-        <section className="w-full">
-          {categoryOrder
-            .filter((cat) => linksByCategory[cat]?.length)
-            .map((cat) => (
-              <div key={cat} className="mb-6">
-                <h2 className="mb-3 text-lg font-semibold text-theme-muted">
-                  {categoryLabels[cat] || cat}
-                </h2>
-                <div className="flex flex-col gap-3">
-                  {linksByCategory[cat].map((link) => (
-                    <LinkCard
-                      key={link.id}
-                      title={link.title}
-                      url={link.url}
-                      category={link.category}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))}
-        </section>
-      )}
-
-      {user.links.length === 0 && user.projects.length === 0 && (
+      {user.projects.length === 0 && (
         <p className="text-theme-muted">No content yet.</p>
       )}
 
-      {/* Contact Footer */}
-      {user.email && (
-        <footer className="w-full border-t border-theme-muted/20 pt-6 text-center">
+      {/* Footer */}
+      <footer className="w-full border-t border-theme-muted/20 pt-6 text-center">
+        {user.email && (
           <a
             href={`mailto:${user.email}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-theme-accent transition hover:opacity-80"
@@ -127,8 +101,16 @@ export default async function UserProfilePage({ params }: Props) {
             <Mail className="h-4 w-4" />
             {user.email}
           </a>
-        </footer>
-      )}
+        )}
+        <div className="mt-4">
+          <Link
+            href="/"
+            className="text-sm font-medium text-theme-accent transition hover:opacity-80"
+          >
+            &larr; Back to Home
+          </Link>
+        </div>
+      </footer>
     </main>
   );
 }

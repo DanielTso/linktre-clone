@@ -1,7 +1,6 @@
 interface ProfileHeaderProps {
   name: string;
   username: string;
-  bio?: string | null;
   avatarUrl?: string | null;
   title?: string | null;
   company?: string | null;
@@ -10,7 +9,6 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({
   name,
   username,
-  bio,
   avatarUrl,
   title,
   company,
@@ -34,7 +32,7 @@ export default function ProfileHeader({
       <h1 className="text-2xl font-bold text-theme-primary">{name}</h1>
       {title && company ? (
         <p className="text-sm font-medium text-theme-accent">
-          {title} @ {company}
+          {title} | {company}
         </p>
       ) : title ? (
         <p className="text-sm font-medium text-theme-accent">{title}</p>
@@ -42,11 +40,6 @@ export default function ProfileHeader({
         <p className="text-sm font-medium text-theme-accent">{company}</p>
       ) : null}
       <p className="text-sm text-theme-muted">@{username}</p>
-      {bio && (
-        <p className="max-w-md text-center leading-relaxed text-theme-secondary">
-          {bio}
-        </p>
-      )}
     </div>
   );
 }
